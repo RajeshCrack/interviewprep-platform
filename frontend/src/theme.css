@@ -1,0 +1,56 @@
+:root {
+  --bg: #F7F8FC; --surface: #FFFFFF; --ink: #14172B; --muted: #5B6178; --line: #E4E7F2;
+  --primary: #4F3FE8; --on-primary: #FFFFFF; --primary-soft: #ECEAFF;
+  --spark-soft: #FFEDE5; --spark-text: #C2410C; --good: #0E8F52; --bad: #D92D34;
+  --display: 'Plus Jakarta Sans', system-ui, sans-serif; --body: 'Inter', system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1022; --surface: #171A33; --ink: #EEF0FF; --muted: #9AA1C7; --line: #2A2F55;
+    --primary: #8B7CFF; --on-primary: #0E1022; --primary-soft: #262455;
+    --spark-soft: #3A2420; --spark-text: #FF9A66; --good: #3DD68C; --bad: #FF6B70;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); }
+h1, h2 { font-family: var(--display); line-height: 1.2; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 800; }
+h2 { font-size: 1.3rem; font-weight: 700; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; border-radius: 6px; }
+.muted { color: var(--muted); } .small { font-size: .85rem; } .pad { padding: 24px; }
+.label { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+.stack { display: grid; gap: 16px; align-content: start; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.ring-card { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.banner { background: var(--spark-soft); color: var(--ink); border-radius: 14px; padding: 14px 18px; margin: 0; font-weight: 600; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px 16px; font-weight: 600; cursor: pointer; }
+.btn.primary { background: var(--primary); color: var(--on-primary); border-color: transparent; }
+.btn.ghost { background: transparent; }
+.btn[disabled] { opacity: .6; cursor: not-allowed; }
+.brand { display: flex; align-items: center; gap: 10px; font: 800 1.1rem var(--display); margin: 0; }
+.logo { width: 28px; height: 28px; border-radius: 8px; background: var(--primary); display: inline-block; }
+.field { display: grid; gap: 6px; border: 0; padding: 0; margin: 0; }
+.field label, .field legend { font-weight: 600; font-size: .85rem; }
+.field input[type=text], .field input[type=email], .field input[type=password], .field input[type=time] {
+  border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 12px; width: 100%;
+}
+.field input[type=range] { width: 100%; accent-color: var(--primary); }
+.radio { display: flex; gap: 8px; align-items: center; font-weight: 500 !important; }
+.err { color: var(--bad); font-size: .85rem; min-height: 1.2em; margin: 0; }
+.auth { max-width: 1000px; margin: 0 auto; min-height: 100vh; display: grid; gap: 32px; align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  padding: 24px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left)); }
+.hero { display: grid; gap: 14px; }
+.steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.shell { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto;
+  padding: 20px max(16px, env(safe-area-inset-right)) 40px max(16px, env(safe-area-inset-left)); }
+.nav { display: grid; gap: 6px; align-content: start; }
+.nav a { padding: 10px 12px; border-radius: 12px; text-decoration: none; color: var(--muted); font-weight: 600; }
+.nav a.active { background: var(--primary-soft); color: var(--primary); }
+@media (max-width: 760px) { .shell { grid-template-columns: minmax(0, 1fr); } .nav { grid-auto-flow: column; align-items: center; justify-content: start; overflow-x: auto; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
