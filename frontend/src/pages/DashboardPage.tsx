@@ -1,15 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
-import { api, type Dashboard } from '../api'
+import { Link } from 'react-router-dom'
+import { api, type Dashboard, type RoadmapTopic } from '../api'
 import { levelFromXp, reminderMessage, ringFraction, xpToNextLevel } from '../lib/progress'
 
 export default function DashboardPage() {
   const [data, setData] = useState<Dashboard | null>(null)
   const [error, setError] = useState('')
+  const [current, setCurrent] = useState<RoadmapTopic | null>(null)
 
   const load = useCallback(() => {
     api.dashboard().then(setData).catch((e: Error) => setError(e.message))
   }, [])
   useEffect(load, [load])
+  useEffect(() => {
+    api.roadmap('java').then((r) => setCurrent(r.topics.find((t) => t.status === 'CURRENT') ?? null)).catch(() => undefined)
+  }, [])
 
   async function log() {
     try { setData(await api.logStudy(15)) } catch (e) { setError((e as Error).message) }
@@ -53,6 +58,13 @@ export default function DashboardPage() {
           <p className="muted small">{xpToNextLevel(data.xp)} XP to the next level.</p>
         </section>
       </div>
+      {current && (
+        <section className="card" aria-label="Continue learning">
+          <p className="label">Continue learning · Java · topic {current.position}</p>
+          <h2>{current.title}</h2>
+          <p><Link className="btn primary" to={`/topics/${current.id}`}>Continue</Link></p>
+        </section>
+      )}
     </div>
   )
 }

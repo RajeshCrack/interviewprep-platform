@@ -64,7 +64,7 @@ describe('dashboard and goals', () => {
   it('logs study time and closes the ring, extending the streak', async () => {
     await mockApi.register('Aarav Sharma', 'aarav@college.edu', 'password1')
     await mockApi.saveGoal({ hoursPerDay: 0.5, reminderTime: '20:00', channel: 'PUSH' })
-    render(<DashboardPage />)
+    render(<MemoryRouter><DashboardPage /></MemoryRouter>)
     expect(await screen.findByText('0m of 30m')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: /Log 15 minutes/ }))
     expect(await screen.findByText('15m of 30m')).toBeInTheDocument()

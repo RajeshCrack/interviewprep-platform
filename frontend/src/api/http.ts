@@ -1,4 +1,4 @@
-import { ApiError, type Api, type Dashboard, type Goal, type Session } from './types'
+import { ApiError, type Api, type CourseSummary, type Dashboard, type Goal, type Roadmap, type Session, type TopicDetail } from './types'
 
 const BASE = import.meta.env.VITE_API_URL ?? '/api'
 const ACCESS = 'gr.access'
@@ -67,5 +67,8 @@ export const httpApi: Api = {
   },
   dashboard: () => authed<Dashboard>('/dashboard'),
   saveGoal: (goal: Goal) => authed<Goal>('/me/goal', { method: 'PUT', body: JSON.stringify(goal) }),
+  courses: () => authed<CourseSummary[]>('/courses'),
+  roadmap: (slug: string) => authed<Roadmap>(`/courses/${encodeURIComponent(slug)}/roadmap`),
+  topic: (id: string) => authed<TopicDetail>(`/topics/${encodeURIComponent(id)}`),
   logStudy: (minutes: number) => authed<Dashboard>('/me/study-log', { method: 'POST', body: JSON.stringify({ minutes }) }),
 }

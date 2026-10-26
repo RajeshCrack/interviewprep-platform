@@ -3,7 +3,7 @@
 Interview-prep platform for college students: learn a topic, clear a 20-question MCQ gate (14 of 20), clear a coding round, then the next topic unlocks.
 
 - `frontend/` React + TypeScript + Vite. Runs against an in-browser mock API by default. `VITE_USE_MOCK=false` switches to the real API (`/api`, proxied to `localhost:8080` in dev).
-- `backend/` Spring Boot 3 (Java 21) + PostgreSQL + Flyway. Phase 1: register, login, refresh and logout, goals, dashboard, streak and XP, and the pure gate rules.
+- `backend/` Spring Boot 3 (Java 21) + PostgreSQL + Flyway. Phase 1: register, login, refresh and logout, goals, dashboard, streak and XP, and the pure gate rules. Phase 2: course catalog, Java roadmap with locked topics, topic lessons (topic 1 has full content so far).
 
 ## Run it
 
