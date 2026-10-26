@@ -75,3 +75,30 @@ button, input { font: inherit; color: inherit; }
 .progress progress { width: 200px; max-width: 100%; accent-color: var(--primary); }
 .prose { max-width: 70ch; } .prose p { margin: 0 0 10px; }
 pre.code { background: #12142A; color: #E6E8FF; border-radius: 12px; padding: 14px 16px; overflow-x: auto; margin: 0; font: 400 .85rem/1.6 ui-monospace, Menlo, monospace; }
+
+/* MCQ test */
+.timer { font: 800 1.5rem var(--display); margin: 0; padding: 6px 14px; border-radius: 12px; background: var(--primary-soft); color: var(--primary); font-variant-numeric: tabular-nums; }
+.timer.low { background: var(--spark-soft); color: var(--bad); }
+.test-layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; }
+@media (max-width: 760px) { .test-layout { grid-template-columns: minmax(0, 1fr); } }
+.prompt { font-size: 1.05rem; font-weight: 600; margin: 0; }
+.options { display: grid; gap: 10px; }
+.option { display: flex; gap: 12px; align-items: flex-start; text-align: left; border: 2px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px; cursor: pointer; min-width: 0; overflow-wrap: anywhere; }
+.option:hover:not([disabled]) { border-color: var(--primary); }
+.option.picked { border-color: var(--primary); background: var(--primary-soft); }
+.key { flex: none; width: 24px; height: 24px; border-radius: 7px; display: inline-grid; place-items: center; font: 700 .8rem var(--display); background: var(--bg); border: 1px solid var(--line); }
+.palette { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.pal { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 8px 0; font-weight: 700; cursor: pointer; }
+.pal.done { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.pal.here { outline: 3px solid var(--primary); outline-offset: 1px; }
+.confirm { border-color: var(--primary); }
+.result.pass { border-color: var(--good); }
+.result.fail { border-color: var(--spark-text); }
+.score { font: 800 3rem/1 var(--display); margin: 0; } .score span { color: var(--primary); }
+.group-score { font: 800 1.5rem var(--display); margin: 0; }
+.review summary { cursor: pointer; font-weight: 600; }
+.review.right { border-left: 4px solid var(--good); } .review.wrong { border-left: 4px solid var(--spark-text); }
+.review-options { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.review-options li { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); overflow-wrap: anywhere; }
+.review-options li.is-correct { border-color: var(--good); background: color-mix(in srgb, var(--good) 10%, var(--surface)); }
+.review-options li.is-picked { border-color: var(--spark-text); background: var(--spark-soft); }

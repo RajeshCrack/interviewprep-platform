@@ -52,6 +52,15 @@ public class CourseService {
         return new Roadmap(course, passed, topics);
     }
 
+    /** The topic's place on this student's roadmap: PASSED, CURRENT or LOCKED. 404 when the topic does not exist. */
+    @Transactional(readOnly = true)
+    public RoadmapTopic entryFor(UUID userId, UUID topicId) {
+        String slug = jdbc.query("SELECT c.slug FROM topics t JOIN courses c ON c.id = t.course_id WHERE t.id = ?",
+                rs -> rs.next() ? rs.getString(1) : null, topicId);
+        if (slug == null) throw new ApiException(HttpStatus.NOT_FOUND, "Topic not found.");
+        return roadmap(userId, slug).topics().stream().filter(t -> t.id().equals(topicId)).findFirst().orElseThrow();
+    }
+
     @Transactional(readOnly = true)
     public TopicDetail topic(UUID userId, UUID topicId) {
         String slug = jdbc.query("SELECT c.slug FROM topics t JOIN courses c ON c.id = t.course_id WHERE t.id = ?",

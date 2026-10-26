@@ -24,6 +24,24 @@ export interface TopicDetail {
   videoQuery: string | null; mcqPassed: boolean; codingPassed: boolean; nextTopicId: string | null
 }
 
+export type QuestionKind = 'THEORY' | 'CODE'
+export type QuestionDifficulty = 'EASY' | 'HARD'
+export interface McqQuestion {
+  position: number; kind: QuestionKind; prompt: string; codeSnippet: string | null; options: string[]; selected: number | null
+}
+export interface McqAttempt {
+  id: string; topicId: string; startedAt: string; expiresAt: string; total: number; questions: McqQuestion[]
+}
+export interface McqGroup { kind: QuestionKind; difficulty: QuestionDifficulty; correct: number; total: number }
+export interface McqReviewItem {
+  position: number; kind: QuestionKind; difficulty: QuestionDifficulty; prompt: string; codeSnippet: string | null
+  options: string[]; selected: number | null; correct: number; isCorrect: boolean; explanation: string
+}
+export interface McqResult {
+  attemptId: string; topicId: string; score: number; total: number; passMark: number; passed: boolean
+  submittedAt: string; xpAwarded: number; groups: McqGroup[]; review: McqReviewItem[]
+}
+
 export interface Api {
   register(name: string, email: string, password: string): Promise<Session>
   login(email: string, password: string): Promise<Session>
@@ -35,6 +53,13 @@ export interface Api {
   courses(): Promise<CourseSummary[]>
   roadmap(slug: string): Promise<Roadmap>
   topic(id: string): Promise<TopicDetail>
+  /** Starts a test for the topic, or returns the one already running. */
+  startMcq(topicId: string): Promise<McqAttempt>
+  getMcq(attemptId: string): Promise<McqAttempt>
+  saveMcqAnswer(attemptId: string, position: number, selected: number | null): Promise<void>
+  /** answers has one entry per question (0 to 3, or null for blank). */
+  submitMcq(attemptId: string, answers: (number | null)[]): Promise<McqResult>
+  mcqResult(attemptId: string): Promise<McqResult>
 }
 
 export class ApiError extends Error {

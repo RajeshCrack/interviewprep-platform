@@ -70,7 +70,9 @@ function TopicView({ id }: { id: string }) {
           <div className="card">
             <div className="top"><h2>Round 1 · MCQ test</h2>{topic.mcqPassed && <span className="chip good">Passed</span>}</div>
             <p className="muted small">20 questions, half theory and half code. Score 14 or more to pass.</p>
-            <button className="btn primary" disabled>Opens in the next release</button>
+            {topic.mcqPassed
+              ? <p className="muted small">You passed this test. On to the coding round.</p>
+              : <Link className="btn primary" to={`/topics/${topic.id}/test`}>Start the test</Link>}
           </div>
           <div className="card">
             <div className="top"><h2>Round 2 · Coding</h2>{topic.codingPassed ? <span className="chip good">Passed</span> : !topic.mcqPassed && <span className="chip">Locked</span>}</div>

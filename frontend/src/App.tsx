@@ -6,6 +6,8 @@ import CoursesPage from './pages/CoursesPage'
 import GoalPage from './pages/GoalPage'
 import RoadmapPage from './pages/RoadmapPage'
 import TopicPage from './pages/TopicPage'
+import McqPage from './pages/McqPage'
+import McqResultPage from './pages/McqResultPage'
 
 function Shell() {
   const { user, ready, logout } = useAuth()
@@ -37,6 +39,8 @@ export default function App() {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:slug" element={<RoadmapPage />} />
             <Route path="/topics/:id" element={<TopicPage />} />
+            <Route path="/topics/:id/test" element={<McqPage />} />
+            <Route path="/tests/:attemptId/result" element={<McqResultPage />} />
             <Route path="/goals" element={<GoalPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

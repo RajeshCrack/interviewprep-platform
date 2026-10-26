@@ -94,4 +94,14 @@ export const mockApi: Api = {
     if (!was && u.today >= goalMin) { u.streak += 1; u.xp += 50 }
     u.xp += Math.floor(minutes / 5); update(u); return view(u)
   },
+  // The question bank and grading live on the server only, so the in-browser stand-in cannot run a test.
+  async startMcq() { throw noServer() },
+  async getMcq() { throw noServer() },
+  async saveMcqAnswer() { throw noServer() },
+  async submitMcq() { throw noServer() },
+  async mcqResult() { throw noServer() },
+}
+
+function noServer() {
+  return new ApiError(501, 'Tests need the real server. Start the backend and run without VITE_USE_MOCK.')
 }

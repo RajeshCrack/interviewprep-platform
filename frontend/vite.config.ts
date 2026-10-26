@@ -4,5 +4,5 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   plugins: [react()],
   server: { proxy: { '/api': { target: 'http://localhost:8080', rewrite: (p) => p.replace(/^\/api/, '') } } },
-  test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'], globals: true, css: false },
+  test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'], globals: true, css: false, env: { VITE_USE_MOCK: 'true' } },
 })

@@ -1,4 +1,4 @@
-import { ApiError, type Api, type CourseSummary, type Dashboard, type Goal, type Roadmap, type Session, type TopicDetail } from './types'
+import { ApiError, type Api, type CourseSummary, type Dashboard, type Goal, type McqAttempt, type McqResult, type Roadmap, type Session, type TopicDetail } from './types'
 
 const BASE = import.meta.env.VITE_API_URL ?? '/api'
 const ACCESS = 'gr.access'
@@ -70,5 +70,12 @@ export const httpApi: Api = {
   courses: () => authed<CourseSummary[]>('/courses'),
   roadmap: (slug: string) => authed<Roadmap>(`/courses/${encodeURIComponent(slug)}/roadmap`),
   topic: (id: string) => authed<TopicDetail>(`/topics/${encodeURIComponent(id)}`),
+  startMcq: (topicId: string) => authed<McqAttempt>(`/topics/${encodeURIComponent(topicId)}/mcq/attempts`, { method: 'POST' }),
+  getMcq: (id: string) => authed<McqAttempt>(`/mcq/attempts/${encodeURIComponent(id)}`),
+  saveMcqAnswer: (id: string, position: number, selected: number | null) =>
+    authed<void>(`/mcq/attempts/${encodeURIComponent(id)}/answers/${position}`, { method: 'PUT', body: JSON.stringify({ selected }) }),
+  submitMcq: (id: string, answers: (number | null)[]) =>
+    authed<McqResult>(`/mcq/attempts/${encodeURIComponent(id)}/submit`, { method: 'POST', body: JSON.stringify({ answers }) }),
+  mcqResult: (id: string) => authed<McqResult>(`/mcq/attempts/${encodeURIComponent(id)}/result`),
   logStudy: (minutes: number) => authed<Dashboard>('/me/study-log', { method: 'POST', body: JSON.stringify({ minutes }) }),
 }
