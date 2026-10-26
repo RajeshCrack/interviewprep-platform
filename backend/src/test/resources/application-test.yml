@@ -7,3 +7,5 @@ spring:
 app:
   jwt:
     secret: test-secret-test-secret-test-secret-123456
+  judge:
+    mode: local

@@ -1,0 +1,19 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        String s = new Scanner(System.in).next();
+        Map<Character, Integer> last = new HashMap<>();
+        int best = 0, start = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            Integer at = last.get(c);
+            if (at != null && at >= start) start = at + 1;
+            last.put(c, i);
+            best = Math.max(best, i - start + 1);
+        }
+        System.out.println(best);
+    }
+}

@@ -42,6 +42,26 @@ export interface McqResult {
   submittedAt: string; xpAwarded: number; groups: McqGroup[]; review: McqReviewItem[]
 }
 
+export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD'
+export interface CodingProblem {
+  id: string; position: number; difficulty: Difficulty; title: string; statement: string; starterCode: string
+  samples: { input: string; expected: string }[]; solved: boolean; lastCode: string | null
+}
+export interface CodingRound {
+  topicId: string; passed: boolean; solvedCount: number; totalProblems: number; solvedEasy: number; totalEasy: number
+  neededTotal: number; problems: CodingProblem[]
+}
+export type CodingTestStatus = 'PASSED' | 'WRONG_ANSWER' | 'RUNTIME_ERROR' | 'TIME_LIMIT' | 'NOT_RUN'
+export interface CodingTestResult {
+  position: number; visible: boolean; passed: boolean; status: CodingTestStatus
+  input: string | null; expected: string | null; actual: string | null; error: string | null
+}
+export type SubmissionStatus = 'ACCEPTED' | 'WRONG_ANSWER' | 'COMPILE_ERROR' | 'RUNTIME_ERROR' | 'TIME_LIMIT'
+export interface CodingSubmission {
+  id: string; mode: 'RUN' | 'SUBMIT'; status: SubmissionStatus; passedTests: number; totalTests: number
+  message: string | null; tests: CodingTestResult[]; solved: boolean; roundPassed: boolean; xpAwarded: number
+}
+
 export interface Api {
   register(name: string, email: string, password: string): Promise<Session>
   login(email: string, password: string): Promise<Session>
@@ -60,6 +80,9 @@ export interface Api {
   /** answers has one entry per question (0 to 3, or null for blank). */
   submitMcq(attemptId: string, answers: (number | null)[]): Promise<McqResult>
   mcqResult(attemptId: string): Promise<McqResult>
+  codingRound(topicId: string): Promise<CodingRound>
+  /** RUN checks the sample tests only. SUBMIT checks every test and can solve the problem. */
+  submitCode(problemId: string, code: string, mode: 'RUN' | 'SUBMIT'): Promise<CodingSubmission>
 }
 
 export class ApiError extends Error {

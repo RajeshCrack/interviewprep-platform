@@ -8,6 +8,7 @@ import RoadmapPage from './pages/RoadmapPage'
 import TopicPage from './pages/TopicPage'
 import McqPage from './pages/McqPage'
 import McqResultPage from './pages/McqResultPage'
+import CodingPage from './pages/CodingPage'
 
 function Shell() {
   const { user, ready, logout } = useAuth()
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/courses/:slug" element={<RoadmapPage />} />
             <Route path="/topics/:id" element={<TopicPage />} />
             <Route path="/topics/:id/test" element={<McqPage />} />
+            <Route path="/topics/:id/coding" element={<CodingPage />} />
             <Route path="/tests/:attemptId/result" element={<McqResultPage />} />
             <Route path="/goals" element={<GoalPage />} />
           </Route>

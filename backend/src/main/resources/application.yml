@@ -29,3 +29,9 @@ app:
     secret: ${JWT_SECRET:}
     access-minutes: 15
     refresh-days: 30
+  judge:
+    # disabled (default), local (development only, not sandboxed) or judge0 (production)
+    mode: ${JUDGE_MODE:disabled}
+    url: ${JUDGE_URL:}
+    token: ${JUDGE_TOKEN:}
+    time-limit-seconds: 3

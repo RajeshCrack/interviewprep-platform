@@ -100,8 +100,10 @@ export const mockApi: Api = {
   async saveMcqAnswer() { throw noServer() },
   async submitMcq() { throw noServer() },
   async mcqResult() { throw noServer() },
+  async codingRound() { throw noServer() },
+  async submitCode() { throw noServer() },
 }
 
 function noServer() {
-  return new ApiError(501, 'Tests need the real server. Start the backend and run without VITE_USE_MOCK.')
+  return new ApiError(501, 'Tests and coding problems need the real server. Start the backend and run without VITE_USE_MOCK.')
 }
