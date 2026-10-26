@@ -40,7 +40,7 @@ export default function GoalPage() {
         {(['PUSH', 'EMAIL'] as const).map((c) => (
           <label key={c} className="radio">
             <input type="radio" name="channel" checked={channel === c} onChange={() => setChannel(c)} />
-            {c === 'PUSH' ? 'Push notification' : 'Email'}
+            {c === 'PUSH' ? 'In the app' : 'In the app and by email'}
           </label>
         ))}
       </fieldset>

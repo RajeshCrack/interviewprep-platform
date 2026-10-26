@@ -1,4 +1,4 @@
-import { ApiError, type Api, type CodingRound, type CodingSubmission, type CourseSummary, type Dashboard, type Goal, type McqAttempt, type McqResult, type Roadmap, type Session, type TopicDetail } from './types'
+import { ApiError, type Api, type Badge, type CodingRound, type CodingSubmission, type CourseSummary, type Dashboard, type Goal, type McqAttempt, type NotificationList, type McqResult, type Roadmap, type Session, type TopicDetail } from './types'
 
 const BASE = import.meta.env.VITE_API_URL ?? '/api'
 const ACCESS = 'gr.access'
@@ -77,6 +77,9 @@ export const httpApi: Api = {
   submitMcq: (id: string, answers: (number | null)[]) =>
     authed<McqResult>(`/mcq/attempts/${encodeURIComponent(id)}/submit`, { method: 'POST', body: JSON.stringify({ answers }) }),
   mcqResult: (id: string) => authed<McqResult>(`/mcq/attempts/${encodeURIComponent(id)}/result`),
+  notifications: () => authed<NotificationList>('/me/notifications'),
+  markNotificationsRead: () => authed<void>('/me/notifications/read', { method: 'POST' }),
+  badges: () => authed<Badge[]>('/me/badges'),
   codingRound: (topicId: string) => authed<CodingRound>(`/topics/${encodeURIComponent(topicId)}/coding`),
   submitCode: (problemId: string, code: string, mode: 'RUN' | 'SUBMIT') =>
     authed<CodingSubmission>(`/coding/problems/${encodeURIComponent(problemId)}/submissions`, { method: 'POST', body: JSON.stringify({ code, mode }) }),

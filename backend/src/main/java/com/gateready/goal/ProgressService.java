@@ -1,6 +1,7 @@
 package com.gateready.goal;
 
 import com.gateready.common.ApiException;
+import com.gateready.engage.BadgeService;
 import com.gateready.user.User;
 import com.gateready.user.UserRepository;
 import com.gateready.user.UserStats;
@@ -23,9 +24,11 @@ public class ProgressService {
     private final UserStatsRepository stats;
     private final StudyLogDao logs;
     private final Clock clock;
+    private final BadgeService badges;
 
     public ProgressService(UserRepository users, GoalRepository goals, UserStatsRepository stats,
-                           StudyLogDao logs, Clock clock) {
+                           StudyLogDao logs, Clock clock, BadgeService badges) {
+        this.badges = badges;
         this.users = users;
         this.goals = goals;
         this.stats = stats;
@@ -58,7 +61,8 @@ public class ProgressService {
             s.setLastGoalDate(today);
             s.addXp(GOAL_BONUS_XP);
         }
-        stats.save(s);
+        stats.saveAndFlush(s); // flush so the badge check, which reads with SQL, sees the new streak
+        badges.award(userId);
         return view(userId, today);
     }
 

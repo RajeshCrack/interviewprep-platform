@@ -100,6 +100,10 @@ export const mockApi: Api = {
   async saveMcqAnswer() { throw noServer() },
   async submitMcq() { throw noServer() },
   async mcqResult() { throw noServer() },
+  // Reminders and badges are server features. The stand-in shows none, so the dashboard still renders.
+  async notifications() { return { unread: 0, items: [] } },
+  async markNotificationsRead() { return },
+  async badges() { return [] },
   async codingRound() { throw noServer() },
   async submitCode() { throw noServer() },
 }

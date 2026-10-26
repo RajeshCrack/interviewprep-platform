@@ -31,6 +31,10 @@ cd backend && mvn verify      # needs PostgreSQL with the gateready_test databas
 cd frontend && npm test
 ```
 
+Phase 5: reminders and badges. Every minute the server checks who is due: a student who has not met their daily goal gets one reminder a day at the time they chose (up to 3 hours late if the server was down), as an in-app notification and, if they chose email, an email. Nine badges (streaks, first MCQ pass, first solve, topics cleared) are awarded automatically with a notification. Not built yet: browser push notifications, which need a service worker and VAPID keys; the "push" setting is shown as "In the app" until then.
+
+Email: set `SPRING_MAIL_HOST` (plus `SPRING_MAIL_PORT`, `SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD`, `MAIL_FROM`) to send real email. Without it, emails are written to the log. Set `app.reminders.enabled=false` to switch the scheduler off.
+
 Code judging is chosen with `JUDGE_MODE`: `disabled` (default, submissions answer 503), `local` (development and tests; runs code with the JDK on the same machine, **not sandboxed**, never use in production) or `judge0` (production; set `JUDGE_URL` and optionally `JUDGE_TOKEN`). For local development: `JUDGE_MODE=local mvn spring-boot:run`.
 
 Backend settings come from environment variables: `DB_URL`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ORIGINS`, `APP_ZONE` (default `Asia/Kolkata`, decides what "today" means for goals and streaks).

@@ -4,6 +4,7 @@ import com.gateready.common.ApiException;
 import com.gateready.course.CourseDtos.RoadmapTopic;
 import com.gateready.course.CourseDtos.TopicStatus;
 import com.gateready.course.CourseService;
+import com.gateready.engage.BadgeService;
 import com.gateready.gate.GateRules;
 import com.gateready.gate.GateRules.Difficulty;
 import com.gateready.gate.GateRules.Kind;
@@ -41,8 +42,10 @@ public class McqService {
     private final CourseService courses;
     private final UserStatsRepository stats;
     private final Clock clock;
+    private final BadgeService badges;
 
-    public McqService(JdbcTemplate jdbc, CourseService courses, UserStatsRepository stats, Clock clock) {
+    public McqService(JdbcTemplate jdbc, CourseService courses, UserStatsRepository stats, Clock clock, BadgeService badges) {
+        this.badges = badges;
         this.jdbc = jdbc;
         this.courses = courses;
         this.stats = stats;
@@ -161,6 +164,7 @@ public class McqService {
                 stats.save(s);
                 xp = PASS_XP;
             }
+            badges.award(userId);
         }
         return resultView(a, rows, graded, now, xp);
     }

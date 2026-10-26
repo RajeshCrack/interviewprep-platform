@@ -29,6 +29,10 @@ app:
     secret: ${JWT_SECRET:}
     access-minutes: 15
     refresh-days: 30
+  reminders:
+    enabled: true
+  mail:
+    from: ${MAIL_FROM:no-reply@gateready.local}
   judge:
     # disabled (default), local (development only, not sandboxed) or judge0 (production)
     mode: ${JUDGE_MODE:disabled}

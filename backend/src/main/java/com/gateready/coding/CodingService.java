@@ -6,6 +6,7 @@ import com.gateready.common.ApiException;
 import com.gateready.course.CourseDtos.RoadmapTopic;
 import com.gateready.course.CourseDtos.TopicStatus;
 import com.gateready.course.CourseService;
+import com.gateready.engage.BadgeService;
 import com.gateready.gate.GateRules;
 import com.gateready.user.UserStats;
 import com.gateready.user.UserStatsRepository;
@@ -37,9 +38,11 @@ public class CodingService {
     private final UserStatsRepository stats;
     private final CodeRunner runner;
     private final Clock clock;
+    private final BadgeService badges;
 
     public CodingService(JdbcTemplate jdbc, TransactionTemplate tx, CourseService courses, UserStatsRepository stats,
-                         CodeRunner runner, Clock clock) {
+                         CodeRunner runner, Clock clock, BadgeService badges) {
+        this.badges = badges;
         this.jdbc = jdbc;
         this.tx = tx;
         this.courses = courses;
@@ -155,6 +158,7 @@ public class CodingService {
                     }
                 }
             }
+            if (solvedNow) badges.award(userId);
             if (!solvedNow) {
                 solvedNow = Boolean.TRUE.equals(jdbc.query("SELECT true FROM coding_solved WHERE user_id = ? AND problem_id = ?",
                         rs -> rs.next() ? Boolean.TRUE : Boolean.FALSE, userId, problemId));

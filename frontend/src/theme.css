@@ -121,3 +121,12 @@ pre.code { background: #12142A; color: #E6E8FF; border-radius: 12px; padding: 14
 .tests li p { margin: 0; }
 .tests li.ok { border-left: 4px solid var(--good); } .tests li.bad { border-left: 4px solid var(--spark-text); }
 pre.err-out { color: #FFB4B8; white-space: pre-wrap; }
+
+/* Notifications and badges */
+.notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.notes li { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); overflow-wrap: anywhere; }
+.notes li.unread { border-color: var(--primary); background: var(--primary-soft); }
+.badges { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); }
+.badges li { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); min-width: 0; }
+.badges li.earned { border-color: var(--good); background: color-mix(in srgb, var(--good) 10%, var(--surface)); }
+.badges li.locked { opacity: .65; }

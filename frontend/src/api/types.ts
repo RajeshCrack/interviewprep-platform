@@ -62,6 +62,10 @@ export interface CodingSubmission {
   message: string | null; tests: CodingTestResult[]; solved: boolean; roundPassed: boolean; xpAwarded: number
 }
 
+export interface AppNotification { id: string; kind: 'REMINDER' | 'BADGE'; title: string; body: string; createdAt: string; read: boolean }
+export interface NotificationList { unread: number; items: AppNotification[] }
+export interface Badge { key: string; title: string; description: string; earned: boolean; earnedAt: string | null }
+
 export interface Api {
   register(name: string, email: string, password: string): Promise<Session>
   login(email: string, password: string): Promise<Session>
@@ -80,6 +84,9 @@ export interface Api {
   /** answers has one entry per question (0 to 3, or null for blank). */
   submitMcq(attemptId: string, answers: (number | null)[]): Promise<McqResult>
   mcqResult(attemptId: string): Promise<McqResult>
+  notifications(): Promise<NotificationList>
+  markNotificationsRead(): Promise<void>
+  badges(): Promise<Badge[]>
   codingRound(topicId: string): Promise<CodingRound>
   /** RUN checks the sample tests only. SUBMIT checks every test and can solve the problem. */
   submitCode(problemId: string, code: string, mode: 'RUN' | 'SUBMIT'): Promise<CodingSubmission>
