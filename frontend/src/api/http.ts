@@ -61,6 +61,16 @@ export const httpApi: Api = {
     if (token) await raw('/auth/logout', { method: 'POST', body: JSON.stringify({ refreshToken: token }) }).catch(() => undefined)
     write(ACCESS, null); write(REFRESH, null)
   },
+  async forgotPassword(email) {
+    await body(await raw('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }))
+  },
+  async resetPassword(token, newPassword) {
+    await body(await raw('/auth/reset-password', { method: 'POST', body: JSON.stringify({ token, newPassword }) }))
+  },
+  async verifyEmail(token) {
+    await body(await raw('/auth/verify-email', { method: 'POST', body: JSON.stringify({ token }) }))
+  },
+  resendVerification: () => authed<void>('/me/resend-verification', { method: 'POST' }),
   async restore() {
     if (!read(ACCESS) && !read(REFRESH)) return null
     try { return { user: (await authed<{ user: Session['user'] }>('/me')).user } } catch { return null }

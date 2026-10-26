@@ -38,7 +38,7 @@ public class ReminderService {
     }
 
     private record Candidate(UUID id, String name, String email, double hours, String reminderTime, String channel,
-                             int streak, LocalDate lastGoalDate, int minutesToday) {}
+                             int streak, LocalDate lastGoalDate, int minutesToday, boolean emailVerified) {}
 
     /** Sends every reminder that is due right now. Returns how many were sent. */
     public int sendDueReminders() {
@@ -52,7 +52,7 @@ public class ReminderService {
 
         List<Candidate> candidates = jdbc.query("""
                 SELECT u.id, u.name, u.email, g.hours_per_day, g.reminder_time, g.channel,
-                       COALESCE(s.streak, 0) AS streak, s.last_goal_date, COALESCE(l.minutes, 0) AS minutes
+                       COALESCE(s.streak, 0) AS streak, s.last_goal_date, COALESCE(l.minutes, 0) AS minutes, (u.email_verified_at IS NOT NULL) AS verified
                 FROM users u
                 JOIN goals g ON g.user_id = u.id
                 LEFT JOIN user_stats s ON s.user_id = u.id
@@ -61,7 +61,7 @@ public class ReminderService {
                   AND NOT EXISTS (SELECT 1 FROM reminder_log r WHERE r.user_id = u.id AND r.day = ?)""",
                 (rs, i) -> new Candidate(rs.getObject("id", UUID.class), rs.getString("name"), rs.getString("email"),
                         rs.getBigDecimal("hours_per_day").doubleValue(), rs.getString("reminder_time"), rs.getString("channel"),
-                        rs.getInt("streak"), rs.getObject("last_goal_date", LocalDate.class), rs.getInt("minutes")),
+                        rs.getInt("streak"), rs.getObject("last_goal_date", LocalDate.class), rs.getInt("minutes"), rs.getBoolean("verified")),
                 Date.valueOf(today), nowText, earliest, Date.valueOf(today));
 
         int sent = 0;
@@ -75,7 +75,8 @@ public class ReminderService {
             int streak = StreakCalculator.current(c.lastGoalDate(), today, c.streak());
             ReminderRules.Message m = ReminderRules.message(c.name().split(" ")[0], c.minutesToday(), goalMinutes, streak);
             notifications.add(c.id(), "REMINDER", m.title(), m.body(), instant);
-            if ("EMAIL".equals(c.channel())) {
+            // Email goes only to addresses the student has proved they own, so a typo never gets our mail.
+            if ("EMAIL".equals(c.channel()) && c.emailVerified()) {
                 try {
                     email.send(c.email(), m.title(), m.body());
                 } catch (RuntimeException e) {

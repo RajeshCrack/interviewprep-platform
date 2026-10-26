@@ -73,7 +73,15 @@ class EngageApiTest {
 
     private record Student(String token, UUID id, String email) {}
 
+    /** Registers a student whose email is already verified, with the verification mail cleared from the outbox. */
     private Student register(String address) throws Exception {
+        Student s = registerUnverified(address);
+        jdbc.update("UPDATE users SET email_verified_at = now() WHERE id = ?", s.id());
+        email.sent.clear();
+        return s;
+    }
+
+    private Student registerUnverified(String address) throws Exception {
         String res = mvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
                 .content(json.writeValueAsString(Map.of("name", "Aarav Sharma", "email", address, "password", "password1"))))
                 .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
@@ -109,6 +117,17 @@ class EngageApiTest {
     }
 
     // ---- reminders ----
+
+    @Test
+    void unverifiedAddressGetsTheInAppReminderButNoEmail() throws Exception {
+        Student s = registerUnverified("typo@college.edu");
+        email.sent.clear();
+        setGoal(s, 2, "20:00", "EMAIL");
+        clock.set(START.plus(Duration.ofMinutes(31)));
+        assertThat(reminders.sendDueReminders()).isEqualTo(1);
+        assertThat(reminderCount(s)).isEqualTo(1);
+        assertThat(email.sent).isEmpty();
+    }
 
     @Test
     void nothingIsSentBeforeTheChosenTime() throws Exception {

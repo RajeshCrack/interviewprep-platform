@@ -1,6 +1,6 @@
 export type Channel = 'PUSH' | 'EMAIL'
 
-export interface User { id: string; name: string; email: string }
+export interface User { id: string; name: string; email: string; emailVerified: boolean }
 export interface Goal { hoursPerDay: number; reminderTime: string; channel: Channel }
 export interface Dashboard {
   user: User
@@ -70,6 +70,13 @@ export interface Api {
   register(name: string, email: string, password: string): Promise<Session>
   login(email: string, password: string): Promise<Session>
   logout(): Promise<void>
+  /** Asks for a reset link. The answer is the same whether or not the address has an account. */
+  forgotPassword(email: string): Promise<void>
+  /** Sets a new password with the one-time link token. Signs the student out everywhere. */
+  resetPassword(token: string, newPassword: string): Promise<void>
+  verifyEmail(token: string): Promise<void>
+  /** Sends a new verification link to the logged-in student. */
+  resendVerification(): Promise<void>
   restore(): Promise<Session | null>
   dashboard(): Promise<Dashboard>
   saveGoal(goal: Goal): Promise<Goal>

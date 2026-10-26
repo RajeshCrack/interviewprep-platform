@@ -18,6 +18,7 @@ createdb -O gateready gateready_test
 # backend  (JWT_SECRET must be 32+ characters)
 cd backend
 JWT_SECRET=change-me-change-me-change-me-1234 mvn spring-boot:run
+# Without SMTP, verification and reset links are printed in this terminal's log.
 
 # frontend
 cd frontend && npm install

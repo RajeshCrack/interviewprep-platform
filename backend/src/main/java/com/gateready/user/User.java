@@ -16,6 +16,8 @@ public class User {
     private String role;
     @Column(name = "created_at")
     private Instant createdAt;
+    @Column(name = "email_verified_at")
+    private Instant emailVerifiedAt;
 
     protected User() {}
 
@@ -33,4 +35,7 @@ public class User {
     public String getEmail() { return email; }
     public String getPasswordHash() { return passwordHash; }
     public String getRole() { return role; }
+    public boolean isEmailVerified() { return emailVerifiedAt != null; }
+    public void markEmailVerified(Instant at) { if (emailVerifiedAt == null) emailVerifiedAt = at; }
+    public void changePasswordHash(String hash) { this.passwordHash = hash; }
 }

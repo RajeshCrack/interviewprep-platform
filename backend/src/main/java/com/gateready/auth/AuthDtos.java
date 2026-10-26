@@ -19,5 +19,15 @@ public final class AuthDtos {
 
     public record RefreshRequest(@NotBlank(message = "Missing refresh token.") String refreshToken) {}
 
+    public record TokenRequest(@NotBlank(message = "Missing link token.") String token) {}
+
+    public record ForgotRequest(@NotBlank(message = "Enter your email.") @Email(message = "Enter a valid email address.") String email) {}
+
+    public record ResetRequest(
+            @NotBlank(message = "Missing link token.") String token,
+            @NotBlank(message = "Use at least 8 characters.") @Size(min = 8, max = 72, message = "Password must be 8 to 72 characters.") String newPassword) {}
+
+    public record MessageResponse(String message) {}
+
     public record TokenResponse(String accessToken, String refreshToken, UserView user) {}
 }

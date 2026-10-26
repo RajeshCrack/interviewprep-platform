@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
+import Field from './Field'
 import { validateLogin, validateRegister, type FieldErrors } from '../lib/validation'
 
 export default function AuthPage({ mode }: { mode: 'login' | 'register' }) {
@@ -51,23 +52,12 @@ export default function AuthPage({ mode }: { mode: 'login' | 'register' }) {
           autoComplete={isRegister ? 'new-password' : 'current-password'} />
         <p className="err" role="alert">{formError}</p>
         <button className="btn primary" disabled={busy}>{busy ? 'Please wait…' : isRegister ? 'Create account' : 'Log in'}</button>
+        {!isRegister && <p className="small"><Link to="/forgot-password">Forgot your password?</Link></p>}
         <p className="muted small">
           {isRegister ? 'Already registered? ' : 'New here? '}
           <Link to={isRegister ? '/login' : '/register'}>{isRegister ? 'Log in' : 'Create an account'}</Link>
         </p>
       </form>
-    </div>
-  )
-}
-
-function Field(p: { id: string; label: string; value: string; onChange(v: string): void; error?: string; type?: string; autoComplete?: string }) {
-  return (
-    <div className="field">
-      <label htmlFor={p.id}>{p.label}</label>
-      <input id={p.id} type={p.type ?? 'text'} value={p.value} autoComplete={p.autoComplete}
-        aria-invalid={!!p.error} aria-describedby={p.error ? `${p.id}-err` : undefined}
-        onChange={(e) => p.onChange(e.target.value)} />
-      {p.error && <span className="err" id={`${p.id}-err`}>{p.error}</span>}
     </div>
   )
 }

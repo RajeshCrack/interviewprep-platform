@@ -130,3 +130,8 @@ pre.err-out { color: #FFB4B8; white-space: pre-wrap; }
 .badges li { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); min-width: 0; }
 .badges li.earned { border-color: var(--good); background: color-mix(in srgb, var(--good) 10%, var(--surface)); }
 .badges li.locked { opacity: .65; }
+
+.auth.single { max-width: 460px; grid-template-columns: 1fr; }
+.banner.verify { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 16px; }
+.banner.verify .btn { padding: 6px 12px; }
+.linklike { background: none; border: 0; padding: 0; color: var(--primary); text-decoration: underline; cursor: pointer; font: inherit; }

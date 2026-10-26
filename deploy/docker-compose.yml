@@ -27,6 +27,7 @@ services:
       JUDGE_MODE: judge0
       JUDGE_URL: ${JUDGE_URL:?set JUDGE_URL in deploy/.env}
       JUDGE_TOKEN: ${JUDGE_TOKEN:?set JUDGE_TOKEN in deploy/.env}
+      APP_BASE_URL: ${APP_BASE_URL:?set APP_BASE_URL in deploy/.env (the website address, used in email links)}
       SPRING_MAIL_HOST: ${SPRING_MAIL_HOST:-}
       SPRING_MAIL_PORT: ${SPRING_MAIL_PORT:-587}
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME:-}

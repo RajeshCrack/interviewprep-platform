@@ -9,6 +9,10 @@ import TopicPage from './pages/TopicPage'
 import McqPage from './pages/McqPage'
 import McqResultPage from './pages/McqResultPage'
 import CodingPage from './pages/CodingPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
+import VerifyBanner from './VerifyBanner'
 
 function Shell() {
   const { user, ready, logout } = useAuth()
@@ -23,7 +27,10 @@ function Shell() {
         <NavLink to="/goals">Goals</NavLink>
         <button className="btn ghost" onClick={logout}>Log out</button>
       </nav>
-      <main><Outlet /></main>
+      <main>
+        {!user.emailVerified && <VerifyBanner />}
+        <Outlet />
+      </main>
     </div>
   )
 }
@@ -35,6 +42,9 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route element={<Shell />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/courses" element={<CoursesPage />} />

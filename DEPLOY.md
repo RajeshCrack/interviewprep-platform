@@ -14,7 +14,7 @@ Students ── Netlify (React site)
 
 Student code runs only on the Judge0 server, which has nothing else on it. Never run `JUDGE_MODE=local` in production: it runs code on the API machine with no sandbox.
 
-You need: a domain (or a free Netlify address for the site plus a subdomain for the API), a Netlify account, a Hetzner account, and optionally an SMTP account for reminder emails.
+You need: a domain (or a free Netlify address for the site plus a subdomain for the API), a Netlify account, a Hetzner account, and an SMTP account (for verification, password-reset and reminder emails).
 
 ## 1. Servers and network
 
@@ -44,7 +44,7 @@ Judge0 runs **Java 13**. Lessons, problems and reference solutions must not use 
 
 1. DNS: an A record for `api.yourdomain` pointing at the API server's public address.
 2. `git clone https://github.com/RajeshCrack/interviewprep-platform && cd interviewprep-platform/deploy`
-3. `cp .env.example .env` and fill it in: `API_DOMAIN`, `DB_PASSWORD`, `JWT_SECRET` (32+ characters), `JUDGE_URL=http://10.0.0.3:2358`, `JUDGE_TOKEN` (same as on the Judge0 server). Set `CORS_ORIGINS` after step 4.
+3. `cp .env.example .env` and fill it in: `API_DOMAIN`, `DB_PASSWORD`, `JWT_SECRET` (32+ characters), `APP_BASE_URL` (the Netlify address, used in the links inside emails), `JUDGE_URL=http://10.0.0.3:2358`, `JUDGE_TOKEN` (same as on the Judge0 server). Set `CORS_ORIGINS` after step 4.
 4. `docker compose up -d --build`. The first start runs every database migration and seeds the Java course.
 5. `curl https://api.yourdomain/actuator/health` must answer `{"status":"UP"}`. Caddy fetches the HTTPS certificate on its own once DNS is right.
 
@@ -72,7 +72,7 @@ Register, set a goal, open Java topic 1, pass the MCQ test, open the coding roun
 
 ## Not ready yet: decide before real students arrive
 
-- **No password reset and no email verification.** A student who forgets a password is locked out and the only fix is editing the database. This is the biggest gap. Building both is the next job I recommend.
+- **Password reset and email verification need real SMTP.** Both work end to end, but the links are sent by email. Without `SPRING_MAIL_HOST` they appear only in the API log, so set SMTP (and test with your own address) before inviting students. Accounts created before this feature count as verified. Reminder emails go only to verified addresses.
 - **Only topic 1 has content.** Topics 2 to 10 show as locked and have no lesson, no MCQ bank and no coding problems, so no student can get past topic 1 today. Each topic needs a lesson, 40 MCQs (10 in each theory/code and easy/hard group) and 5 coding problems.
 - **Browser push notifications** are not built. Reminders are in the app, plus email when SMTP is set.
 - **Sessions live in the browser's local storage**, which a script injected into the page could read. Fine for a pilot; add a Content-Security-Policy header before a larger launch.

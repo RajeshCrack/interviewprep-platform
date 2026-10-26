@@ -7,6 +7,8 @@ interface AuthState {
   login(email: string, password: string): Promise<void>
   register(name: string, email: string, password: string): Promise<void>
   logout(): Promise<void>
+  /** Re-reads the account, for example after the email was verified in another tab. */
+  refreshUser(): Promise<void>
 }
 
 const Ctx = createContext<AuthState | null>(null)
@@ -26,6 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async login(email, password) { setUser((await api.login(email, password)).user) },
     async register(name, email, password) { setUser((await api.register(name, email, password)).user) },
     async logout() { await api.logout(); setUser(null) },
+    async refreshUser() { const s = await api.restore(); if (s) setUser(s.user) },
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

@@ -14,7 +14,7 @@ const cur = (): Rec | undefined => {
   return load().find((u) => u.id === id)
 }
 const view = (u: Rec): Dashboard => ({
-  user: { id: u.id, name: u.name, email: u.email }, goal: u.goal, todayMinutes: u.today, streak: u.streak, xp: u.xp,
+  user: { id: u.id, name: u.name, email: u.email, emailVerified: true }, goal: u.goal, todayMinutes: u.today, streak: u.streak, xp: u.xp,
 })
 const need = (): Rec => { const u = cur(); if (!u) throw new ApiError(401, 'Please log in.'); return u }
 const update = (u: Rec) => save(load().map((x) => (x.id === u.id ? u : x)))
@@ -52,16 +52,16 @@ export const mockApi: Api = {
       goal: { hoursPerDay: 2, reminderTime: '20:00', channel: 'PUSH' }, today: 0, streak: 0, xp: 0,
     }
     save([...users, u]); localStorage.setItem(CURRENT, u.id)
-    return { user: { id: u.id, name, email } }
+    return { user: { id: u.id, name, email, emailVerified: true } }
   },
   async login(email, password) {
     const u = load().find((x) => x.email.toLowerCase() === email.toLowerCase() && x.password === password)
     if (!u) throw new ApiError(401, 'Email or password is incorrect.')
     localStorage.setItem(CURRENT, u.id)
-    return { user: { id: u.id, name: u.name, email: u.email } }
+    return { user: { id: u.id, name: u.name, email: u.email, emailVerified: true } }
   },
   async logout() { localStorage.removeItem(CURRENT) },
-  async restore() { const u = cur(); return u ? { user: { id: u.id, name: u.name, email: u.email } } : null },
+  async restore() { const u = cur(); return u ? { user: { id: u.id, name: u.name, email: u.email, emailVerified: true } } : null },
   async dashboard() { return view(need()) },
   async saveGoal(goal) { const u = need(); u.goal = goal; update(u); return goal },
   async courses() { need(); return COURSES },
@@ -95,6 +95,10 @@ export const mockApi: Api = {
     u.xp += Math.floor(minutes / 5); update(u); return view(u)
   },
   // The question bank and grading live on the server only, so the in-browser stand-in cannot run a test.
+  async forgotPassword() { throw noServer() },
+  async resetPassword() { throw noServer() },
+  async verifyEmail() { throw noServer() },
+  async resendVerification() { throw noServer() },
   async startMcq() { throw noServer() },
   async getMcq() { throw noServer() },
   async saveMcqAnswer() { throw noServer() },

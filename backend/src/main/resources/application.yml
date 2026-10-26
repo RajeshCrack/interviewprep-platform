@@ -33,6 +33,8 @@ app:
     secret: ${JWT_SECRET:}
     access-minutes: 15
     refresh-days: 30
+  # The website's address, used in the links inside emails (verify email, reset password).
+  base-url: ${APP_BASE_URL:http://localhost:5173}
   reminders:
     enabled: true
   mail:
