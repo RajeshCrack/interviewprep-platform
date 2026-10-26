@@ -9,9 +9,10 @@ export default function GoalPage() {
   const [time, setTime] = useState('20:00')
   const [channel, setChannel] = useState<Channel>('PUSH')
   const [status, setStatus] = useState('')
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    api.dashboard().then((d) => { setHours(d.goal.hoursPerDay); setTime(d.goal.reminderTime); setChannel(d.goal.channel) }).catch(() => undefined)
+    api.dashboard().then((d) => { setHours(d.goal.hoursPerDay); setTime(d.goal.reminderTime); setChannel(d.goal.channel) }).catch(() => undefined).finally(() => setLoaded(true))
   }, [])
 
   async function save(e: FormEvent) {
@@ -19,6 +20,8 @@ export default function GoalPage() {
     try { await api.saveGoal({ hoursPerDay: hours, reminderTime: time, channel }); setStatus('Goal saved.') }
     catch (err) { setStatus((err as Error).message) }
   }
+
+  if (!loaded) return <p className="muted">Loading your goal…</p>
 
   return (
     <form className="card stack" onSubmit={save} aria-label="Study goal">

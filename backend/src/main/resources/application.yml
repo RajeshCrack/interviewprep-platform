@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: gateready-api
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/gateready}
+    username: ${DB_USER:gateready}
+    password: ${DB_PASSWORD:gateready}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+app:
+  zone: ${APP_ZONE:Asia/Kolkata}
+  cors-origins: ${CORS_ORIGINS:http://localhost:5173}
+  jwt:
+    # Must be at least 32 characters. Set JWT_SECRET in every real environment.
+    secret: ${JWT_SECRET:}
+    access-minutes: 15
+    refresh-days: 30

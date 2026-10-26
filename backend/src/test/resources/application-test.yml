@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:postgresql://localhost:5432/gateready_test}
+    username: ${TEST_DB_USER:gateready}
+    password: ${TEST_DB_PASSWORD:gateready}
+
+app:
+  jwt:
+    secret: test-secret-test-secret-test-secret-123456
