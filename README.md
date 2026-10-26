@@ -38,3 +38,7 @@ Email: set `SPRING_MAIL_HOST` (plus `SPRING_MAIL_PORT`, `SPRING_MAIL_USERNAME`, 
 Code judging is chosen with `JUDGE_MODE`: `disabled` (default, submissions answer 503), `local` (development and tests; runs code with the JDK on the same machine, **not sandboxed**, never use in production) or `judge0` (production; set `JUDGE_URL` and optionally `JUDGE_TOKEN`). For local development: `JUDGE_MODE=local mvn spring-boot:run`.
 
 Backend settings come from environment variables: `DB_URL`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`, `CORS_ORIGINS`, `APP_ZONE` (default `Asia/Kolkata`, decides what "today" means for goals and streaks).
+
+## Deploy
+
+See [DEPLOY.md](DEPLOY.md): Netlify for the site, a Hetzner server for the API and PostgreSQL, a second Hetzner server for Judge0, with backups and a launch checklist.

@@ -16,7 +16,8 @@ import java.util.stream.Stream;
 /**
  * Runs student code with the JDK installed on this machine. It limits time, memory and output, but it
  * does NOT isolate the program from the machine. Use it for development and tests only. Production
- * uses Judge0 (see Judge0Runner), which runs code in a sandbox.
+ * uses Judge0 (see Judge0Runner), which runs code in a sandbox. Code is compiled with --release 13 because
+ * Judge0 1.13.1 runs Java 13, so a problem that works here also works there.
  */
 public class LocalJavaRunner implements CodeRunner {
     private static final int MAX_OUTPUT = 64 * 1024;
@@ -76,7 +77,7 @@ public class LocalJavaRunner implements CodeRunner {
         Path dir = Files.createTempDirectory(root, "c");
         Files.writeString(dir.resolve("Main.java"), source, StandardCharsets.UTF_8);
         Path log = dir.resolve("javac.log");
-        Process p = base(new ProcessBuilder("javac", "-proc:none", "-encoding", "UTF-8", "Main.java").directory(dir.toFile()))
+        Process p = base(new ProcessBuilder("javac", "--release", "13", "-proc:none", "-encoding", "UTF-8", "Main.java").directory(dir.toFile()))
                 .redirectErrorStream(true).redirectOutput(log.toFile()).start();
         if (!p.waitFor(COMPILE_LIMIT.toMillis(), TimeUnit.MILLISECONDS)) {
             p.destroyForcibly();

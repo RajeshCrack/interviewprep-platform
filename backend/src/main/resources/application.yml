@@ -14,6 +14,10 @@ spring:
 
 server:
   port: ${PORT:8080}
+  # Behind Caddy the real client address arrives in X-Forwarded-For. Without this every student shares the
+  # proxy's address and the login rate limiter would lock everyone out together. The API port must never be
+  # published to the internet, only the proxy may reach it.
+  forward-headers-strategy: native
 
 management:
   endpoints:

@@ -1,0 +1,58 @@
+# API server: Caddy (HTTPS) -> API -> PostgreSQL. Only Caddy publishes ports; the API and the database are
+# reachable only inside this compose network. Judge0 runs on its own server (see deploy/judge0).
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?set API_DOMAIN in deploy/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api: { condition: service_healthy }
+
+  api:
+    build: ../backend
+    restart: unless-stopped
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/gateready
+      DB_USER: gateready
+      DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in deploy/.env}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in deploy/.env (32+ characters)}
+      CORS_ORIGINS: ${CORS_ORIGINS:?set CORS_ORIGINS in deploy/.env}
+      APP_ZONE: ${APP_ZONE:-Asia/Kolkata}
+      JUDGE_MODE: judge0
+      JUDGE_URL: ${JUDGE_URL:?set JUDGE_URL in deploy/.env}
+      JUDGE_TOKEN: ${JUDGE_TOKEN:?set JUDGE_TOKEN in deploy/.env}
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST:-}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT:-587}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME:-}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD:-}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+      MAIL_FROM: ${MAIL_FROM:-no-reply@example.com}
+    depends_on:
+      db: { condition: service_healthy }
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gateready
+      POSTGRES_USER: gateready
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in deploy/.env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gateready -d gateready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

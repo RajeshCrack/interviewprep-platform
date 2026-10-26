@@ -1,0 +1,10 @@
+# Caddy gets and renews the HTTPS certificate for API_DOMAIN by itself.
+{$API_DOMAIN} {
+	encode gzip
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		-Server
+	}
+	reverse_proxy api:8080
+}

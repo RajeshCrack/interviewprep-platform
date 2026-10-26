@@ -10,8 +10,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 @Configuration
 class EmailConfig {
     @Bean
-    EmailSender emailSender(ObjectProvider<JavaMailSender> mail, @Value("${app.mail.from:no-reply@gateready.local}") String from) {
-        JavaMailSender sender = mail.getIfAvailable();
+    EmailSender emailSender(ObjectProvider<JavaMailSender> mail, @Value("${app.mail.from:no-reply@gateready.local}") String from,
+                            @Value("${spring.mail.host:}") String host) {
+        // An empty SPRING_MAIL_HOST (common in env files) still creates a mail bean, so check the value too.
+        JavaMailSender sender = host.isBlank() ? null : mail.getIfAvailable();
         return sender == null ? new LoggingEmailSender() : new SmtpEmailSender(sender, from);
     }
 }

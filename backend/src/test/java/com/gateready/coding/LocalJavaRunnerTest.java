@@ -30,6 +30,12 @@ class LocalJavaRunnerTest {
     }
 
     @Test
+    void usesTheSameJavaLevelAsJudge0() {
+        var o = runner.run("public class Main { record P(int x) {} public static void main(String[] a) { System.out.println(new P(1)); } }", "");
+        assertThat(o.status()).isEqualTo(CodeRunner.Status.COMPILE_ERROR); // records need Java 14 or later
+    }
+
+    @Test
     void reportsRuntimeExceptions() {
         var o = runner.run(program("int[] x = new int[1]; System.out.println(x[2]);"), "");
         assertThat(o.status()).isEqualTo(CodeRunner.Status.RUNTIME_ERROR);
